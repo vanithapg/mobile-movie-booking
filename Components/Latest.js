@@ -4,12 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   Text,
   View,
-  Button,
   Image,
   StyleSheet,
   ScrollView,
+  TouchableOpacity,
+  SafeAreaView,
 } from "react-native";
 import { styles } from "./styles";
+import { Card, ListItem, Button, Icon } from "react-native-elements";
 
 import { Link } from "react-router-native";
 import { SearchBar } from "react-native-elements";
@@ -26,9 +28,9 @@ export default function Latest() {
 
   console.log("from API", movies);
   return (
-    <ScrollView>
-      <SearchBar placeholder="Type Here..." onChangeText={""} value={""} />
-      <View>
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
+        <SearchBar placeholder="search movies" onChangeText={""} value={""} />
         <Text> Latest Movies</Text>
         {movies.loading && <Text>Loading...</Text>}
         {movies.length === 0 && !loading && (
@@ -38,24 +40,18 @@ export default function Latest() {
         {movies.length > 0 &&
           movies.map((movie, i) => (
             <View key={i}>
-              {/* <Image source={{ uri: `${movie.url}` }} /> */}
-              <Image
-                style={styles.poster}
-                source={{
-                  uri: `${movie.imageUrl}`,
-                }}
-              />
-              <Text>{movie.name}</Text>
-              <Link
-                to={`/moviedetails/${movie._id}`}
-                underlayColor="#f0f4f7"
-                style={styles.subNavItem}
-              >
-                <Text>Movie Detail </Text>
-              </Link>
+              <Card>
+                <Card.Title>{movie.name}</Card.Title>
+                <Card.Divider />
+                <Card.Image source={{ uri: `${movie.imageUrl}` }}>
+                  <Link to={`/moviedetails/${movie._id}`}>
+                    <Text style={styles.button}>Movie Details</Text>
+                  </Link>
+                </Card.Image>
+              </Card>
             </View>
           ))}
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }

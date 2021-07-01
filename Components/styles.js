@@ -4,13 +4,18 @@ export const styles = StyleSheet.create({
   container: {
     paddingTop: 50,
   },
+  backImage: {
+    flex: 1,
+    flexDirection: "column",
+  },
   thumb: {
     width: 50,
     height: 50,
   },
   poster: {
-    width: 200,
-    height: 200,
+    width: 300,
+    height: 300,
+    alignSelf: "center",
   },
   container: {
     marginTop: 25,
@@ -18,6 +23,20 @@ export const styles = StyleSheet.create({
   },
   header: {
     fontSize: 20,
+  },
+  image: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+  },
+  button: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: "skyblue",
   },
   nav: {
     flexDirection: "row",
@@ -33,6 +52,14 @@ export const styles = StyleSheet.create({
   },
   topic: {
     textAlign: "center",
-    fontSize: 15,
+    fontSize: 25,
+    alignSelf: "center",
+  },
+  scrollView: {
+    marginHorizontal: 20,
+  },
+  datePickerStyle: {
+    width: 200,
+    marginTop: 20,
   },
 });

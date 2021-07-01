@@ -8,14 +8,13 @@ import {
   Image,
   StyleSheet,
   ScrollView,
+  SafeAreaView,
 } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import { styles } from "./styles";
-// import DatePicker from "react-native-date-picker";
 import { Input } from "react-native-elements";
-// import DateTimePickerModal from "react-native-modal-datetime-picker";
-
-// import Breadcrumb from "react-bootstrap/Breadcrumb";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import DatePicker from "react-native-datepicker";
 
 export default function BookMovie() {
   let { _id } = useParams();
@@ -26,8 +25,28 @@ export default function BookMovie() {
   const [selectedMovie, setSelectedMovie] = useState({});
   const [seats, setSeats] = useState(1);
   const [ticket, setTicket] = useState(false);
-  const [show, setShow] = useState(false);
+  // const [show, setShow] = useState(false);
+  // const [date, setDate] = useState(new Date());
+
   const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState(false);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === "ios");
+    setDate(currentDate);
+    console.log(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode("date");
+  };
 
   console.log("ID ", _id);
 
@@ -45,57 +64,74 @@ export default function BookMovie() {
 
   function generateQR() {
     setTicket(true);
-    setShow(true);
   }
 
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
-
-  const handleConfirm = (date) => {
-    console.warn("A date has been picked: ", date);
-    hideDatePicker();
-  };
-
   return (
-    <View>
-      <Text>Movie Name: {name}</Text>
-      <Image
-        style={styles.poster}
-        source={{
-          uri: `${imageUrl}`,
-        }}
-      />
-      {/* <DatePicker mode="date" date={date} onDateChange={setDate} /> */}
-      {/* <DateTimePickerModal
-        isVisible={isDatePickerVisible}
-        mode="date"
-        onConfirm={handleConfirm}
-        onCancel={hideDatePicker}
-      /> */}
-      <Input placeholder="Enter Date" onChange={setDate} />
-      <Input placeholder="Enter seat count" onChange={setSeats} />
-
-      <Button
-        onPress={generateQR}
-        title="Submit"
-        color="#841584"
-        accessibilityLabel="Click to book movie"
-      />
-      {ticket ? (
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.scrollView}>
         <View>
-          <Text>Ticket Booked !!</Text>
-          <QRCode value={JSON.stringify(name + date + seats)} />
+          {ticket ? (
+            <View style={styles.topic}>
+              <Text>Ticket Booked !!</Text>
+              <QRCode value={JSON.stringify(name + date + seats)} />
+            </View>
+          ) : (
+            <Text> Please book your ticket </Text>
+          )}
+
+          <Text style={styles.topic}>{name}</Text>
+          <Image
+            style={styles.poster}
+            source={{
+              uri: `${imageUrl}`,
+            }}
+          />
+          <View>
+            <Button onPress={showDatepicker} title="Show date picker!" />
+          </View>
+          <DatePicker
+            style={styles.datePickerStyle}
+            date={date} // Initial date from state
+            mode="date" // The enum of date, datetime and time
+            placeholder="select date"
+            format="DD-MM-YYYY"
+            confirmBtnText="Confirm"
+            cancelBtnText="Cancel"
+            customStyles={{
+              dateIcon: {
+                //display: 'none',
+                position: "absolute",
+                left: 0,
+                top: 4,
+                marginLeft: 0,
+              },
+              dateInput: {
+                marginLeft: 36,
+              },
+            }}
+            onDateChange={(date) => {
+              setDate(date);
+            }}
+          />
+          {/* {show && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={date}
+              mode={mode}
+              display="default"
+              onChange={onChange}
+            />
+          )} */}
+          <Input placeholder="Enter seat count" onChange={setSeats} />
+
+          <Button
+            onPress={generateQR}
+            title="Submit"
+            color="#841584"
+            accessibilityLabel="Click to book movie"
+          />
         </View>
-      ) : (
-        <Text> Please book your ticket </Text>
-      )}
-    </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }

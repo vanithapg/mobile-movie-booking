@@ -5,6 +5,7 @@ import { getMovie, getMovies } from "../redux/actions/movies";
 import { View, ScrollView, Text, Image } from "react-native";
 import { styles } from "./styles";
 import { Link } from "react-router-native";
+import { Card, Rating, Button, Icon } from "react-native-elements";
 
 export default function Movie() {
   let { _id } = useParams();
@@ -21,23 +22,25 @@ export default function Movie() {
     console.log(selectedMovie, "selectedMovie");
   }, []);
 
-  const { name, rate, imageUrl } = selectedMovie
+  const { name, rate, imageUrl, type } = selectedMovie
     ? selectedMovie
     : { name: "Sivaji", rate: "4.5" };
 
   return (
     <ScrollView>
-      <Text>Movie Name: {name}</Text>
-      <Text>Rating: {rate}</Text>
-      <Image
-        style={styles.poster}
-        source={{
-          uri: `${imageUrl}`,
-        }}
-      />
-      <Link to={`/bookmovie/${movieId}`}>
-        <Text>Book now </Text>
-      </Link>
+      <View>
+        <Card>
+          <Card.Title>{name}</Card.Title>
+          <Card.Divider />
+          <Card.Image source={{ uri: `${imageUrl}` }}></Card.Image>
+          <Text style={{ marginBottom: 10 }}>{type}</Text>
+          <Rating showRating readonly startingValue={rate} />
+        </Card>
+
+        <Link to={`/bookmovie/${movieId}`}>
+          <Text style={styles.button}>Book now </Text>
+        </Link>
+      </View>
     </ScrollView>
   );
 }
