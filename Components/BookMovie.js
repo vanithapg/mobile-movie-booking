@@ -6,14 +6,12 @@ import {
   View,
   Button,
   Image,
-  StyleSheet,
   ScrollView,
   SafeAreaView,
 } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import { styles } from "./styles";
 import { Input } from "react-native-elements";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import DatePicker from "react-native-datepicker";
 
 export default function BookMovie() {
@@ -86,16 +84,14 @@ export default function BookMovie() {
               uri: `${imageUrl}`,
             }}
           />
-          <View>
-            <Button onPress={showDatepicker} title="Show date picker!" />
-          </View>
+
           <DatePicker
             style={styles.datePickerStyle}
             date={date} // Initial date from state
             mode="date" // The enum of date, datetime and time
             placeholder="select date"
             format="DD-MM-YYYY"
-            confirmBtnText="Confirm"
+            // confirmBtnText="Confirm"
             cancelBtnText="Cancel"
             customStyles={{
               dateIcon: {
